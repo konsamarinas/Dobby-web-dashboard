@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block heading %}System health{% endblock %}
+{% block content %}
+<div class="page-intro"><div><p class="muted mb-1">Operational visibility</p><p class="subtle">A live view of the connection to the DOBBY API system.</p></div><button class="btn btn-primary" id="health-refresh"><i class="bi bi-arrow-clockwise"></i> Refresh now</button></div>
+<div id="health-loading" class="loading-state"><div class="spinner-border spinner-border-sm"></div> Checking API health...</div><div id="health-error" class="alert alert-danger d-none"><span></span><button class="btn btn-sm btn-link text-white" id="health-retry">Retry</button></div>
+<div id="health-content" class="d-none"><div class="row g-3 mb-4"><div class="col-md-4"><div class="health-hero"><div class="pulse"></div><span>Current status</span><strong id="health-status">—</strong><small id="health-time">—</small></div></div><div class="col-md-4"><div class="stat-card"><span>API response time</span><strong id="health-response">—</strong><small>Measured for this request</small></div></div><div class="col-md-4"><div class="stat-card"><span>Last successful request</span><strong class="small-value" id="health-last">—</strong><small>UTC</small></div></div></div><div class="panel"><div class="panel-heading"><div><h2>Health endpoint response</h2><p>Model versions reported by the API.</p></div><span class="badge-soft" id="health-badge">Healthy</span></div><pre id="health-json" class="json-view"></pre></div></div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/health.js') }}"></script>{% endblock %}

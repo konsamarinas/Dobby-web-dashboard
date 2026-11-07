@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ app_name }}{% if page %} · {{ page|capitalize }}{% endif %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body data-page="{{ page }}">
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><span class="brand-mark">D</span><span>DOBBY <b>Intelligence</b></span></div>
+      <div class="nav-label">Workspace</div>
+      <nav class="nav flex-column gap-1">
+        <a class="nav-link {% if page == 'overview' %}active{% endif %}" href="/"><i class="bi bi-grid-1x2-fill"></i> Overview</a>
+        <a class="nav-link {% if page == 'metrics' %}active{% endif %}" href="/metrics"><i class="bi bi-bar-chart-fill"></i> Metrics</a>
+        <a class="nav-link {% if page == 'recommendations' %}active{% endif %}" href="/recommendations"><i class="bi bi-stars"></i> Recommendations</a>
+        <a class="nav-link {% if page == 'forecasting' %}active{% endif %}" href="/forecasting"><i class="bi bi-graph-up-arrow"></i> Forecasting</a>
+        <a class="nav-link {% if page == 'health' %}active{% endif %}" href="/health"><i class="bi bi-heart-pulse-fill"></i> System health</a>
+      </nav>
+      <div class="sidebar-footer"><div class="connection-dot"></div><div><small>API connection</small><strong id="sidebar-status">Checking...</strong></div></div>
+    </aside>
+    <main class="main-content">
+      <header class="topbar"><button class="btn menu-toggle" id="menu-toggle"><i class="bi bi-list"></i></button><div><span class="eyebrow">DASHBOARD</span><h1>{% block heading %}Overview{% endblock %}</h1></div><div class="topbar-meta"><span class="status-pill"><span class="status-dot"></span><span id="top-status">Live API</span></span><span class="avatar">KI</span></div></header>
+      <div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3"></div>
+      <section class="content">{% block content %}{% endblock %}</section>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
