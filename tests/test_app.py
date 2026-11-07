@@ -6,6 +6,7 @@ import pytest
 
 from app import create_app
 from app.services.dobby_client import DobbyAPIError, DobbyClient
+from app.services.business_impact import calculate_business_impact
 
 
 @pytest.fixture
@@ -17,7 +18,7 @@ def app():
 
 def test_pages_render(app):
     client = app.test_client()
-    for path in ("/", "/metrics", "/health", "/recommendations", "/forecasting"):
+    for path in ("/", "/metrics", "/health", "/recommendations", "/forecasting", "/business-impact"):
         response = client.get(path)
         assert response.status_code == 200
         assert b"DOBBY Intelligence" in response.data
@@ -153,3 +154,27 @@ def test_client_does_not_retry_404(monkeypatch):
     with pytest.raises(DobbyAPIError):
         DobbyClient("https://example.test", retries=3).health()
     request.assert_called_once()
+
+
+def test_business_impact_calculations():
+    result = calculate_business_impact(100, 25, 20, 5, 60, 1000, 10, 250)
+    assert result.additional_revenue == 2500
+    assert result.additional_gross_profit == 1500
+    assert result.waste_savings == 100
+    assert result.total_monthly_benefit == 1600
+    assert result.monthly_net_benefit == 1350
+    assert result.annual_net_benefit == 16200
+    assert result.roi_pct == 540
+
+
+def test_business_impact_zero_subscription_has_no_roi():
+    result = calculate_business_impact(0, 0, 0, 5, 60, 1000, 10, 0)
+    assert result.monthly_net_benefit == 100
+    assert result.roi_pct is None
+
+
+def test_business_impact_rejects_invalid_assumptions():
+    with pytest.raises(ValueError):
+        calculate_business_impact(-1, 25, 20, 5, 60, 1000, 10, 250)
+    with pytest.raises(ValueError):
+        calculate_business_impact(100, 25, 20, 101, 60, 1000, 10, 250)

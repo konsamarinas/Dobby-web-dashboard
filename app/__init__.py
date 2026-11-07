@@ -49,6 +49,10 @@ def create_app(config_class=Config):
     def forecasting_page():
         return render_template("forecasting.html", page="forecasting")
 
+    @app.get("/business-impact")
+    def business_impact_page():
+        return render_template("business_impact.html", page="business-impact")
+
     @app.get("/api/overview")
     def overview_api():
         started = time.perf_counter()

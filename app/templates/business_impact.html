@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block heading %}Business Impact{% endblock %}
+{% block content %}
+<div class="page-intro">
+  <div>
+    <p class="muted mb-1">Scenario planning</p>
+    <p class="subtle">Explore the potential financial value of DOBBY using your own business assumptions.</p>
+  </div>
+</div>
+<div class="alert simulator-disclaimer"><i class="bi bi-info-circle"></i> These figures are scenario-based estimates calculated from user-provided assumptions. They are not measured or guaranteed DOBBY results.</div>
+<div class="row g-3">
+  <div class="col-xl-4">
+    <div class="panel">
+      <div class="panel-heading"><div><h2>Business parameters</h2><p>Illustrative assumptions — adjust to your operation.</p></div><span class="badge-soft">Assumptions</span></div>
+      <form id="impact-form" novalidate>
+        <label>Daily Orders<input class="form-control impact-input" name="daily_orders" type="number" min="0" step="1" value="180" inputmode="decimal"></label>
+        <label>Operating Days per Month<input class="form-control impact-input" name="operating_days" type="number" min="0" max="31" step="1" value="26" inputmode="decimal"></label>
+        <label>Average Order Value (€)<input class="form-control impact-input" name="average_order_value" type="number" min="0" step="0.01" value="18" inputmode="decimal"></label>
+        <label>Expected AOV Uplift (%)<input class="form-control impact-input" name="aov_uplift_pct" type="number" min="0" max="100" step="0.1" value="4" inputmode="decimal"></label>
+        <label>Gross Profit Margin (%)<input class="form-control impact-input" name="gross_profit_margin_pct" type="number" min="0" max="100" step="0.1" value="65" inputmode="decimal"></label>
+        <label>Monthly Food Waste Cost (€)<input class="form-control impact-input" name="monthly_food_waste_cost" type="number" min="0" step="0.01" value="1200" inputmode="decimal"></label>
+        <label>Expected Waste Reduction (%)<input class="form-control impact-input" name="waste_reduction_pct" type="number" min="0" max="100" step="0.1" value="10" inputmode="decimal"></label>
+        <label>DOBBY Monthly Subscription Cost (€)<input class="form-control impact-input" name="monthly_subscription_cost" type="number" min="0" step="0.01" value="299" inputmode="decimal"></label>
+        <div id="impact-validation" class="invalid-feedback d-block d-none"></div>
+      </form>
+    </div>
+  </div>
+  <div class="col-xl-8">
+    <div class="row g-3 mb-3">
+      <div class="col-md-4"><div class="kpi-card accent-purple"><div class="kpi-icon"><i class="bi bi-graph-up-arrow"></i></div><span>Monthly net benefit</span><strong id="monthly-net-benefit">—</strong><small>After subscription cost</small></div></div>
+      <div class="col-md-4"><div class="kpi-card accent-green"><div class="kpi-icon"><i class="bi bi-calendar2-check"></i></div><span>Estimated annual net benefit</span><strong id="annual-net-benefit">—</strong><small>Monthly scenario × 12</small></div></div>
+      <div class="col-md-4"><div class="kpi-card accent-blue"><div class="kpi-icon"><i class="bi bi-percent"></i></div><span>Estimated ROI</span><strong id="roi">—</strong><small>Based on monthly cost</small></div></div>
+    </div>
+    <div class="panel chart-panel mb-3">
+      <div class="panel-heading"><div><h2>Monthly financial impact</h2><p>Potential gross profit and savings before subscription cost.</p></div><span class="badge-soft">Scenario</span></div>
+      <canvas id="impact-chart"></canvas>
+    </div>
+    <div class="row g-3 mb-3">
+      <div class="col-lg-7"><div class="panel h-100"><div class="panel-heading"><div><h2>Revenue and savings breakdown</h2><p>Calculated from the assumptions on the left.</p></div></div><div class="status-list"><div><span>Additional monthly revenue</span><b id="additional-revenue">—</b></div><div><span>Additional gross profit</span><b id="additional-gross-profit">—</b></div><div><span>Monthly waste savings</span><b id="waste-savings">—</b></div><div><span>Total monthly benefit</span><b id="total-monthly-benefit">—</b></div><div><span>Subscription cost</span><b id="subscription-cost">—</b></div></div></div></div>
+      <div class="col-lg-5"><div class="panel h-100"><div class="panel-heading"><div><h2>Annual benefit summary</h2><p>Illustrative run-rate view.</p></div></div><div class="annual-summary"><i class="bi bi-piggy-bank"></i><strong id="annual-summary-value">—</strong><span>estimated annual net benefit</span></div><div id="impact-outcome" class="callout mt-3"></div></div></div>
+    </div>
+    <div class="callout"><i class="bi bi-shield-check"></i> This simulator is separate from DOBBY’s measured API metrics. It does not claim that the assumed uplift or waste reduction has been observed in production.</div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/business-impact.js') }}"></script>{% endblock %}
